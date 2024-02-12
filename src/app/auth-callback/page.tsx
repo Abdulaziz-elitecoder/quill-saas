@@ -8,8 +8,8 @@ const Page = () => {
     const origin = searchParams.get('origin')
 
     const { data , isLoading } = trpc.authCallback.useQuery(undefined, {
-        onSuccess : ({success}) => {
-            if (success) {
+        onSuccess : ({data}) => {
+            if(data) {
                 // user is synced to db
                 router.push(origin ? `/${origin}` : '/dashboard')
             }

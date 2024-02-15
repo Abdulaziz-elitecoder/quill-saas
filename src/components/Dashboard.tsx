@@ -14,7 +14,22 @@ const Dashboard = () => {
     string | null
   >(null);
 
+  const utils = trpc.useContext()
+
   const { data: files, isLoading } = trpc.getUserFiles.useQuery();
+
+  const { mutate: deleteFile } =
+    trpc.deleteFile.useMutation({
+      onSuccess: () => {
+        utils.getUserFiles.invalidate()
+      },
+      onMutate({ id }) {
+        setCurrentlyDeletingFile(id)
+      },
+      onSettled() {
+        setCurrentlyDeletingFile(null)
+      },
+    })
 
 
   return (
@@ -66,7 +81,7 @@ const Dashboard = () => {
                   </div>
 
                   <Button
-                    // onClick={() => deleteFile({ id: file.id })}
+                    onClick={() => deleteFile({ id: file.id })}
                     size="sm"
                     className="w-full"
                     variant="destructive"

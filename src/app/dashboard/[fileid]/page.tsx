@@ -1,0 +1,39 @@
+import { db } from "@/db"
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/dist/types/server"
+import { notFound, redirect } from "next/navigation"
+
+interface PageProps {
+    params : {
+        fileid : string
+    }
+}
+
+const Page =  async ({ params } : PageProps) => {
+    // retrieve the file id 
+    const { fileid } = params
+
+    const { getUser } = getKindeServerSession()
+    const user = await getUser()
+
+    if (!user|| !user.id) {
+        redirect(`/auth-callback?origin=dashboard/${fileid}`)
+    }
+    // make db call to get the file
+    const file = await db.file.findFirst({
+        where : {
+            id : fileid,
+            userId : user.id
+        }
+    })
+
+    if (!file) notFound()
+
+
+    return (
+        <div>
+            
+        </div>
+    )
+}
+
+export default Page  

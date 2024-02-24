@@ -11,7 +11,7 @@ export const ourFileRouter = {
       const { getUser } = getKindeServerSession();
       const user = await getUser();
 
-      if (!user || !user.id) throw new Error("UNAUTHORIZED");
+      if (!user || !user.id) throw new Error("Unauthorized");
 
       return { userId: user.id };
     })
@@ -25,7 +25,11 @@ export const ourFileRouter = {
           uploadStatus: "PROCESSING",
         },
       });
+
+
     }),
+
+
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
